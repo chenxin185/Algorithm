@@ -166,6 +166,38 @@ public class SortUtils {
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * 基数排序(从个位开始)
+     *
+     * @param array 待排序的数组
+     * @param d     表示最大的数有多少位
+     */
+    public static void baseSort(int[] array, int d) {
+        int k = 0;
+        int n = 1;
+        int m = 1; //控制键值排序依据在哪一位
+        int[][] temp = new int[10][array.length]; //数组的第一维表示可能的余数0-9,第二维用来存放待排序数组中具体的元素。
+        int[] order = new int[10]; //这个数组主要是用来记录上面这个二维数组的第二维的下标，比如现在三个数，12，22，1，那么下面第一个for循环后：temp[2][0] = 12;temp[2][1] = 22;temp[1][0] = 1;
+        while (m <= d) {
+            for (int i = 0; i < array.length; i++) {
+                int lsd = ((array[i] / n) % 10);
+                temp[lsd][order[lsd]] = array[i];
+                order[lsd]++;
+            }
+            for (int i = 0; i < 10; i++) {
+                //每一次以某位数排序完后，将排序后的元素重新设置给原来的数组，temp中的元素按顺序赋值给array。
+                if (order[i] != 0)
+                    for (int j = 0; j < order[i]; j++) {
+                        array[k] = temp[i][j];
+                        k++;
+                    }
+                order[i] = 0;
+            }
+            n *= 10;
+            k = 0;
+            m++;
+        }
+    }
 
     /**
      * 打印数组的元素
